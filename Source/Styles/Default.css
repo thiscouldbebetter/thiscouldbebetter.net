@@ -1,0 +1,31 @@
+@font-face {
+	font-family: BlockThreeByFive;
+	font-style: normal;
+	src: url(../Fonts/BlockThreeByFive.ttf);
+}
+
+body {
+	background-color: Black;
+	background-position: center;
+	background-image: url('../Images/ThisCouldBeBetter-Title.png');
+	background-repeat: no-repeat;
+	background-size: cover;
+	font-family: BlockThreeByFive;
+	text-align: center;
+	font-size: 24px;
+	color: Gray;
+}
+
+a {
+	color: Gray;
+}
+
+div {
+	margin-left:20%;
+	margin-right:20%;
+}
+
+p {
+	text-align: justify
+}
+
