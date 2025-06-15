@@ -25,14 +25,14 @@
 			include("ContactEmailAddress.php");
 			include("WordsToBlock.php");
 
+			$statusMessage = "About to send message...";
+
 			if (isset($_POST["MessageText"]) == false)
 			{
-				echo "<label>" . wordwrap("ERROR: MessageText not set!") . "</label>";
+				$statusMessage = "ERROR: MessageText not set!";
 			}
 			else
 			{
-				$statusMessage = "About to send message...";
-
 				$messageText = $_POST["MessageText"];
 
 				$messageTextLengthMax = 1024;
@@ -50,9 +50,10 @@
 					// Blocking messages may save bandwidth,
 					// but it will cost more computation time.
 
-					$positionOfWordToBlockInMessageText =
+					$wordToBlockWasFoundInMessageText =
 						mb_strpos($messageText, $wordToBlock);
-					if ($positionOfWordToBlockInMessageText >= 0)
+
+					if ($wordToBlockWasFoundInMessageText)
 					{
 						$messageTextContainsBlockedWordSoFar = true;
 						break;
@@ -86,11 +87,11 @@
 					$statusMessage =
 						$wasMailSentSuccessfully
 						? $statusMessageSuccessful
-						: "An error occurred while submitting the message.";
+						: "An error occurred while sending the message.";
 				}
-
-				echo "<label>" . wordwrap($statusMessage) . "</label>";
 			}
+
+			echo "<label>" . wordwrap($statusMessage) . "</label>";
 
 		?>
 
