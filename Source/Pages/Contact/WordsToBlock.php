@@ -1,0 +1,5 @@
+<?php 
+	$wordsToBlock = array(
+		"crapoplexic"
+	);
+?>

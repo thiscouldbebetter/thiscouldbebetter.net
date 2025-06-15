@@ -23,6 +23,7 @@
 		<?php
 
 			include("ContactEmailAddress.php");
+			include("WordsToBlock.php");
 
 			if (isset($_POST["MessageText"]) == false)
 			{
@@ -30,20 +31,64 @@
 			}
 			else
 			{
-				$messageTextEntered = $_POST["MessageText"];
+				$statusMessage = "About to send message...";
 
-				$wasMailSentSuccessfully = mail
-				(
-					$emailAddressToSendTo,
-					"Contact Form Message", // subject
-					$messageTextEntered
-				);
+				$messageText = $_POST["MessageText"];
 
-				$statusMessage =
-					$wasMailSentSuccessfully
-					? "The message was sent successfully!"
-					: "An error occurred while sending the message.";
-		
+				$messageTextLengthMax = 1024;
+
+				if (strlen($messageText) > messageTextLengthMax)
+				{
+					// The maxLength attribute on the textarea should prevent this.
+					$messageText = substr($messageText, 0, $messageTextLengthMax)
+				}
+
+				$messageTextContainsBlockedWordSoFar = false;
+
+				foreach ($wordsToBlock as $wordToBlock)
+				{
+					// Blocking messages may save bandwidth,
+					// but it will cost more computation time.
+
+					$positionOfWordToBlockInMessageText =
+						mb_strpos($messageText, $wordToBlock);
+					if ($positionOfWordToBlockInMessageText >= 0)
+					{
+						$messageTextContainsBlockedWordSoFar = true;
+						break;
+					}
+				}
+
+				$statusMessageSuccessful =
+					"The message was submitted successfully."
+
+				if ($messageTextContainsBlockedWordSoFar)
+				{
+					// Save bandwidth by not sending spam.
+					// Don't tell the spammer their mail was suppressed.
+					$statusMessage = $statusMessageSuccessful
+				}
+				else
+				{
+					$messageSubject = "Contact Form Message";
+
+					$messageHeaders =
+						"X-Note-Remote-Addr: " . $_SERVER["REMOTE_ADDR"];
+
+					$wasMailSentSuccessfully = mail
+					(
+						$emailAddressToSendTo,
+						$messageSubject,
+						$messageText,
+						$messageHeaders
+					);
+
+					$statusMessage =
+						$wasMailSentSuccessfully
+						? $statusMessageSuccessful
+						: "An error occurred while submitting the message.";
+				}
+
 				echo "<label>" . wordwrap($statusMessage) . "</label>";
 			}
 

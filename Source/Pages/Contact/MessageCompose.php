@@ -31,6 +31,7 @@
 				<textarea
 					name="MessageText"
 					cols="48" rows="16"
+					maxlength="1024"
 				></textarea>
 				<br/>
 
