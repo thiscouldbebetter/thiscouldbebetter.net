@@ -37,10 +37,10 @@
 
 				$messageTextLengthMax = 1024;
 
-				if (strlen($messageText) > messageTextLengthMax)
+				if (strlen($messageText) > $messageTextLengthMax)
 				{
 					// The maxLength attribute on the textarea should prevent this.
-					$messageText = substr($messageText, 0, $messageTextLengthMax)
+					$messageText = substr($messageText, 0, $messageTextLengthMax);
 				}
 
 				$messageTextContainsBlockedWordSoFar = false;
@@ -60,13 +60,13 @@
 				}
 
 				$statusMessageSuccessful =
-					"The message was submitted successfully."
+					"The message was submitted successfully.";
 
 				if ($messageTextContainsBlockedWordSoFar)
 				{
 					// Save bandwidth by not sending spam.
 					// Don't tell the spammer their mail was suppressed.
-					$statusMessage = $statusMessageSuccessful
+					$statusMessage = $statusMessageSuccessful;
 				}
 				else
 				{
